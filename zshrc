@@ -23,7 +23,7 @@ alias xoff='sudo /usr/local/bin/x-c1-softsd.sh'
 
 function update-all() {
   (
-    echo -e "\U1f9d1\U200d\U1f4bb \e[1;33mUpdating packages installed via git...\e[0m"
+    echo -e "\U1f9d1\U200d\U1f4bb \e[1;33mPulling the latest git updates...\e[0m"
     cd $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
     git pull origin
     cd $ZSH_CUSTOM/plugins/zsh-autosuggestions
@@ -35,6 +35,7 @@ function update-all() {
     sudo apt update -y
     sudo apt upgrade -y
     sudo apt autoremove -y
+    echo -e "\U1f984\e[1;35m HOT UNICORNS NOW! \e[0m"
   )
 }
 
