@@ -17,11 +17,11 @@ ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/the
 
 echo "Customizing .zshrc..."
 rm ~/.zshrc
-cp ./zshrc ~/.zshrc
+curl -o ~/.zshrc https://raw.githubusercontent.com/jeremyfuksa/standard-pi-setup/main/zshrc?token=AAFRKT657KNSCMHICUOOL3TBTAKYS
 source ~/.zshrc
 
 echo "Installing .zprofile..."
-cp ./zprofile ~/.zprofile
+curl -o ~/.zprofile https://raw.githubusercontent.com/jeremyfuksa/standard-pi-setup/main/zprofile?token=AAFRKT6WQLIURHAW5IHONT3BTAKUE
 source ~/.zprofile
 
 echo "Configuring git..."
