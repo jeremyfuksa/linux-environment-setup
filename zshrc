@@ -38,7 +38,7 @@ function update-all() {
     sudo apt update -y
     sudo apt upgrade -y
     sudo apt autoremove -y
-    echo -e "\U1f984\e[1;35m HOT UNICORNS NOW! \e[0m"
+    echo -e "\nAll updates complete.\n\U1f984\e[1;35m HOT UNICORNS NOW! \e[0m"
   )
 }
 
