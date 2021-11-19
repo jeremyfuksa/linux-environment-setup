@@ -24,10 +24,13 @@ alias xoff='sudo /usr/local/bin/x-c1-softsd.sh'
 function update-all() {
   (
     echo -e "\U1f9d1\U200d\U1f4bb \e[1;33mPulling the latest git updates...\e[0m"
+    echo -e "\U2139 Pulling zsh-syntax-highlighting..."
     cd $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
     git pull origin
+    echo -e "\U2139 Pulling zsh-autosuggestions..."
     cd $ZSH_CUSTOM/plugins/zsh-autosuggestions
     git pull origin
+    echo -e "\U2139 Pulling spaceship-prompt..."
     cd $ZSH_CUSTOM/themes/spaceship-prompt
     git pull origin
     cd ~/
