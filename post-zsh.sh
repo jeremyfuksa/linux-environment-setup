@@ -21,12 +21,15 @@ clone_or_update_plugin() {
 
 # Install custom .zshrc
 show_status "Installing custom .zshrc..."
-curl -o ~/.zshrc https://gist.githubusercontent.com/jeremyfuksa/440f27c77537c3d2382431f589506e8e/raw/4a4cb841c285d12e6634761b5c50684685a89cc3/.zshrc
-source ~/.zshrc
+curl -o ~/.zshrc https://raw.githubusercontent.com/jeremyfuksa/standard-pi-setup/main/zshrc
+
+# Install custom .zprofile
+show_status "Installing custom .zprofile..."
+curl -o ~/.zshrc https://raw.githubusercontent.com/jeremyfuksa/standard-pi-setup/main/zprofile
 
 # Clear stock MOTD
 show_status "Clearing stock MOTD..."
-echo -n > /etc/motd
+sudo echo -n > /etc/motd
 
 # Clone or update zsh-autosuggestions
 clone_or_update_plugin "https://github.com/zsh-users/zsh-autosuggestions.git" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
@@ -42,6 +45,11 @@ if [[ ! -e "$ZSH_CUSTOM/themes/spaceship.zsh-theme" ]]; then
 else
 		show_status "spaceship.zsh-theme symlink already exists."
 fi
+
+# Source all new files
+show_status "Sourcing all new files..."
+source ~/.zshrc
+source ~/.zprofile
 
 # Run the update-all command in zsh
 show_status "Running update-all command in zsh..."
