@@ -1,5 +1,4 @@
-# Path to your oh-my-zsh installation.
-export ZSH="/home/pi/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="spaceship"
 SPACESHIP_PROMPT_ADD_NEWLINE="true"
@@ -11,39 +10,56 @@ SPACESHIP_PROMPT_DEFAULT_PREFIX="$USER"
 SPACESHIP_PROMPT_FIRST_PREFIX_SHOW="true"
 SPACESHIP_USER_SHOW="true"
 
-zstyle ':omz:update' mode auto      # update automatically without asking
-
-# Which plugins would you like to load?
-# Add wisely, as too many plugins slow down shell startup.
+zstyle ':omz:update' mode auto
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
-
 source $ZSH/oh-my-zsh.sh
 
+# Remove if not a Raspberry Pi in a Geekworm SATA case
 alias xoff='sudo /usr/local/bin/x-c1-softsd.sh'
 
-function update-all() {
+update_git_repo() {
+  local repo_path="$1"
+  cd "$repo_path" || return 1
+  git pull origin
+  cd -
+}
+
+update-all() {
   (
-    echo -e "\U1f9d1\U200d\U1f4bb \e[1;33mPulling the latest git updates...\e[0m"
-    echo -e "\U2139 Pulling zsh-syntax-highlighting..."
-    cd $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
-    git pull origin
-    echo -e "\U2139 Pulling zsh-autosuggestions..."
-    cd $ZSH_CUSTOM/plugins/zsh-autosuggestions
-    git pull origin
-    echo -e "\U2139 Pulling spaceship-prompt..."
-    cd $ZSH_CUSTOM/themes/spaceship-prompt
-    git pull origin
-    cd ~/
-    echo -e "\U1f9d1\U200d\U1f4bb \e[1;33mGetting the latest OS updates...\e[0m"
+    update_git_repo "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+    update_git_repo "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+    update_git_repo "$ZSH_CUSTOM/themes/spaceship-prompt"
     sudo apt update -y
     sudo apt upgrade -y
     sudo apt autoremove -y
-    echo -e "\nAll updates complete.\n\U1f984\e[1;35m HOT UNICORNS NOW! \e[0m"
   )
 }
 
-function install() {
-  (sudo apt install -y $*)
+install() {
+  if [ $# -eq 0 ]; then
+    echo "Usage: install package1 [package2 ...]"
+    return 1
+  fi
+
+  (command sudo apt install -y "$@")
+}
+
+ngensite() {
+  if [ $# -eq 1 ]; then
+    ln -s "/etc/nginx/sites-available/$1" "/etc/nginx/sites-enabled/$1"
+    echo "Site enabled: $1"
+  else
+    echo "Usage: ngensite <site_name>"
+  fi
+}
+
+ngdissite() {
+  if [ $# -eq 1 ]; then
+    rm "/etc/nginx/sites-enabled/$1"
+    echo "Site disabled: $1"
+  else
+    echo "Usage: ngdissite <site_name>"
+  fi
 }
 
 bindkey '[C' forward-word
