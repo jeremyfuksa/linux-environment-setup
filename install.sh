@@ -50,7 +50,7 @@ fi
 # Check and download Starship configuration
 if [ ! -f "$HOME/.config/starship.toml" ]; then
 		echo "Downloading and saving Starship configuration..."
-		curl -o "$HOME/.config/starship.toml" https://raw.githubusercontent.com/jeremyfuksa/standard-pi-setup/main/starship.toml
+		curl -o "$HOME/.config/starship.toml" https://raw.githubusercontent.com/jeremyfuksa/linux-environment-setup/main/starship.toml
 else
 		echo "Starship configuration file already exists."
 		prompt_install || exit 0
@@ -59,7 +59,7 @@ fi
 # Check and download .zshrc
 if ! [ -f "$HOME/.zshrc" ]; then
 		echo "Downloading and saving .zshrc..."
-		curl -o "$HOME/.zshrc" https://raw.githubusercontent.com/jeremyfuksa/standard-pi-setup/main/.zshrc
+		curl -o "$HOME/.zshrc" https://raw.githubusercontent.com/jeremyfuksa/linux-environment-setup/main/.zshrc
 		source "$HOME/.zshrc"
 else
 		echo ".zshrc file already exists."
@@ -69,7 +69,7 @@ fi
 # Check and download .zprofile
 if ! [ -f "$HOME/.zprofile" ]; then
 		echo "Downloading and saving .zprofile..."
-		curl -o "$HOME/.zprofile" https://raw.githubusercontent.com/jeremyfuksa/standard-pi-setup/main/.zprofile
+		curl -o "$HOME/.zprofile" https://raw.githubusercontent.com/jeremyfuksa/linux-environment-setup/main/.zprofile
 		source "$HOME/.zprofile"
 else
 		echo ".zprofile file already exists."
