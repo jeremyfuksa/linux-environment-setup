@@ -8,7 +8,7 @@ After at least a decade of using oh-my-zsh, I had an ADHD-fueled desire to chang
 ## Installation
 Once you've logged into your new Raspberry Pi, run the following:
 ```
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/jeremyfuksa/linux-environment-setup/main/install.sh?token=GHSAT0AAAAAACMOIQXL327L43C7A4HWOOFYZNB2COA)"
+bash -c "$(curl -fsSL https://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@raw.githubusercontent.com/jeremyfuksa/linux-environment-setup/main/install.sh)"
 ```
 
 ## You Can't Mess Up!
