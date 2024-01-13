@@ -17,9 +17,13 @@ backup_file() {
 		local backup_file="$backup_dir/$(basename "$file")_backup_$(date +%Y%m%d%H%M%S)"
 
 		echo "Backing up $file to $backup_file"
-		mkdir -p "$backup_dir"
+		
+		# Ensure backup directory exists
+		mkdir -p "$backup_dir" || { echo "Failed to create backup directory $backup_dir"; exit 1; }
+		
 		cp "$file" "$backup_file"
 }
+
 
 # Function to perform installation for Antigen
 perform_install_antigen() {
