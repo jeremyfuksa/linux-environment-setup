@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "Setting up your environment..."
-
 # Function to prompt user for installation
 prompt_install() {
 		read -p "Do you want to install a new copy? (y/n): " choice
@@ -12,14 +10,70 @@ prompt_install() {
 		esac
 }
 
-# Check if zsh is already the default shell
-if [ "$(basename "$SHELL")" != "zsh" ]; then
-		echo "Changing default shell to Zsh..."
-		sudo apt-get update && apt-get install -y zsh bc git
-		chsh -s $(which zsh)
-else
-		echo "Zsh is already the default shell."
-fi
+# Function to backup existing file
+backup_file() {
+		local file="$1"
+		local backup_dir="$HOME/.backup"
+		local backup_file="$backup_dir/$(basename "$file")_backup_$(date +%Y%m%d%H%M%S)"
+
+		echo "Backing up $file to $backup_file"
+		mkdir -p "$backup_dir"
+		cp "$file" "$backup_file"
+}
+
+# Function to perform installation for Antigen
+perform_install_antigen() {
+		local antigen_file="$1"
+		
+		# Backup existing Antigen file
+		backup_file "$antigen_file"
+
+		# Download the new Antigen file
+		curl -L git.io/antigen > "$antigen_file"
+
+		echo "Antigen installed successfully."
+}
+
+# Function to perform installation for Starship configuration
+perform_install_starship() {
+		local starship_file="$1"
+		
+		# Backup existing Starship configuration file
+		backup_file "$starship_file"
+
+		# Download the new Starship configuration file
+		curl -o "$starship_file" https://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@raw.githubusercontent.com/jeremyfuksa/standard-pi-setup/main/starship.toml
+
+		echo "Starship configuration installed successfully."
+}
+
+# Function to perform installation for .zshrc
+perform_install_zshrc() {
+		local zshrc_file="$1"
+		
+		# Backup existing .zshrc file
+		backup_file "$zshrc_file"
+
+		# Download the new .zshrc file
+		curl -o "$zshrc_file" https://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@raw.githubusercontent.com/jeremyfuksa/standard-pi-setup/main/.zshrc
+
+		# Additional logic, if needed
+		echo ".zshrc installed successfully."
+}
+
+# Function to perform installation for .zprofile
+perform_install_zprofile() {
+		local zprofile_file="$1"
+		
+		# Backup existing .zprofile file
+		backup_file "$zprofile_file"
+
+		# Download the new .zprofile file
+		curl -o "$zprofile_file" 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@https://raw.githubusercontent.com/jeremyfuksa/standard-pi-setup/main/.zprofile
+
+		# Additional logic, if needed
+		echo ".zprofile installed successfully."
+}
 
 # Check and create ~/.config directory
 if [ ! -d "$HOME/.config" ]; then
@@ -30,50 +84,47 @@ else
 fi
 
 # Check and install Antigen
-if ! [ -f "$HOME/.config/antigen.zsh" ]; then
+antigen_file="$HOME/.config/antigen.zsh"
+if ! [ -f "$antigen_file" ]; then
 		echo "Installing Antigen (Zsh plugin manager)..."
-		curl -L git.io/antigen > "$HOME/.config/antigen.zsh"
+		curl -L git.io/antigen > "$antigen_file"
 else
 		echo "Antigen is already installed."
-		prompt_install || exit 0
+		prompt_install || perform_install_antigen "$antigen_file"
 fi
 
 # Check and install Starship
-if ! command -v starship &> /dev/null; then
-		echo "Installing Starship (Shell prompt)..."
-		sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --yes
-else
-		echo "Starship is already installed."
-		prompt_install || exit 0
-fi
-
-# Check and download Starship configuration
-if [ ! -f "$HOME/.config/starship.toml" ]; then
+starship_file="$HOME/.config/starship.toml"
+if ! [ -f "$starship_file" ]; then
 		echo "Downloading and saving Starship configuration..."
-		curl -o "$HOME/.config/starship.toml" https://raw.githubusercontent.com/jeremyfuksa/linux-environment-setup/main/starship.toml
+		curl -o "$starship_file" https://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@raw.githubusercontent.com/jeremyfuksa/standard-pi-setup/main/starship.toml
 else
 		echo "Starship configuration file already exists."
-		prompt_install || exit 0
+		prompt_install || perform_install_starship "$starship_file"
 fi
 
-# Check and download .zshrc
-if ! [ -f "$HOME/.zshrc" ]; then
+# Check and install .zshrc
+zshrc_file="$HOME/.zshrc"
+if ! [ -f "$zshrc_file" ]; then
 		echo "Downloading and saving .zshrc..."
-		curl -o "$HOME/.zshrc" https://raw.githubusercontent.com/jeremyfuksa/linux-environment-setup/main/.zshrc
-		source "$HOME/.zshrc"
+		curl -o "$zshrc_file" https://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@raw.githubusercontent.com/jeremyfuksa/standard-pi-setup/main/.zshrc
+		source "$zshrc_file"  # Assuming you want to source .zshrc after installing
 else
 		echo ".zshrc file already exists."
-		prompt_install || exit 0
+		prompt_install || perform_install_zshrc "$zshrc_file"
+		source "$zshrc_file"  # Assuming you want to source .zshrc after installing
 fi
 
-# Check and download .zprofile
-if ! [ -f "$HOME/.zprofile" ]; then
+# Check and install .zprofile
+zprofile_file="$HOME/.zprofile"
+if ! [ -f "$zprofile_file" ]; then
 		echo "Downloading and saving .zprofile..."
-		curl -o "$HOME/.zprofile" https://raw.githubusercontent.com/jeremyfuksa/linux-environment-setup/main/.zprofile
-		source "$HOME/.zprofile"
+		curl -o "$zprofile_file" https://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@raw.githubusercontent.com/jeremyfuksa/standard-pi-setup/main/.zprofile
+		source "$zprofile_file"  # Assuming you want to source .zprofile after installing
 else
 		echo ".zprofile file already exists."
-		prompt_install || exit 0
+		prompt_install || perform_install_zprofile "$zprofile_file"
+		source "$zprofile_file"  # Assuming you want to source .zprofile after installing
 fi
 
-echo "Environment setup completed."
+echo "Setup completed."
